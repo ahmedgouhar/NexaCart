@@ -1,0 +1,180 @@
+/* Custom properties for easy color management */
+:root {
+  --primary: #0f172a;       /* Deep slate/navy for branding */
+  --accent: #2563eb;        /* Vibrant blue for actions */
+  --accent-hover: #1d4ed8;  /* Darker blue for interactive feedback */
+  --bg-main: #f8fafc;       /* Soft light background */
+  --bg-card: #ffffff;       /* Pure white for product layers */
+  --text-main: #1e293b;     /* Readable dark gray for prose */
+  --text-muted: #64748b;    /* Subdued gray for secondary details */
+  --radius: 16px;           /* Smooth rounded corners */
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-hover: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  margin: 0;
+}
+
+body {
+  margin: 0;
+}
+
+/* Container limits to keep design centered on ultrawide monitors */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Premium Navigation Header */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 8%;
+  background: var(--primary);
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.brand {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
+.brand span {
+  color: var(--accent);
+}
+
+.cart-icon {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cart-icon:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Main Content Area Layout */
+main {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 3rem 8%;
+  box-sizing: border-box;
+}
+
+.hero-section {
+  margin-bottom: 3rem;
+}
+
+.hero-section h2 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+}
+
+.hero-section p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* Responsive Product Grid Pattern */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+/* Advanced Card Design with Interactivity */
+.card {
+  background: var(--bg-card);
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Placeholder for crisp product presentation */
+.image-placeholder {
+  width: 100%;
+  height: 200px;
+  background: #f1f5f9;
+  border-radius: calc(var(--radius) - 4px);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
+
+.card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.02em;
+}
+
+.card .description {
+  color: var(--text-muted);
+  font-size: 0.925rem;
+  line-height: 1.5;
+  margin: 0 0 1.25rem 0;
+  flex-grow: 1;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.card .price {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+/* Call-to-action Action Buttons */
+button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+button:hover {
+  background: var(--accent-hover);
+}
+
+button:active {
+  transform: scale(0.96);
+}

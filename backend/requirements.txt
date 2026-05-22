@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+psycopg2-binary
+pydantic-settings
+redis
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.20
+python-jose[cryptography]
+celery                  # <-- MAKE SURE THIS IS HERE
+pyjwt==2.10.1
+alembic==1.14.1

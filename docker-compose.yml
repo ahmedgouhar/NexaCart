@@ -1,0 +1,92 @@
+
+services:
+  # 1. THE GATEWAY (The Only Public Entrance)
+  nginx:
+    build: ./nginx
+    container_name: nexacart_gateway
+    ports:
+      - "80:80"  # Access everything at http://localhost
+    depends_on:
+      - frontend
+      - backend
+    restart: always
+
+  # 2. DATABASE (PostgreSQL)
+  db:
+    image: postgres:15-alpine
+    container_name: nexacart_db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: nexacart
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d nexacart"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 3. DB MANAGEMENT
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080" # Left open for DB management
+    depends_on:
+      - db
+
+  # 4. CACHE (Redis)
+  redis:
+    image: redis:alpine
+    restart: always
+    command: redis-server --requirepass redis_password123
+
+  # 5. BACKEND (FastAPI)
+  backend:
+    build: ./backend
+    container_name: nexacart_backend
+    volumes:
+      - ./backend:/app
+    environment:
+      - DATABASE_URL=postgresql://admin:password123@db/nexacart
+      - REDIS_URL=redis://:redis_password123@redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  # 6. WORKER (Celery)
+  worker:
+    build: ./backend
+    container_name: nexacart_worker
+    working_dir: /app
+    volumes:
+      - ./backend:/app 
+    command: celery -A app.tasks worker --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://admin:password123@db/nexacart
+      - REDIS_URL=redis://:redis_password123@redis:6379/0
+    depends_on:
+      - redis
+      - db
+
+  # 7. FRONTEND (React Vite)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev  # <-- CRITICAL: Double check this line is exactly here
+    container_name: nexacart_frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=/api/v1
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+
+  
