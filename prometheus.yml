@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s # Scrape targets every 15 seconds
+
+scrape_configs:
+  # Scrape metrics from the FastAPI backend application
+  - job_name: 'fastapi-backend'
+    static_configs:
+      - targets: ['backend:8000'] # Replace 'backend' with your actual backend service name and its internal port
+
+  # Scrape metrics from the Node Exporter (Server infrastructure)
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']

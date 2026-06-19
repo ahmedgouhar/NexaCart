@@ -85,8 +85,56 @@ services:
       - VITE_API_URL=/api/v1
     depends_on:
       - backend
+      
+  # 1. Prometheus Service
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - "9090:9090"
+    networks:
+      - main-network # Match your existing docker-compose network name
+
+  # 2. Grafana Service
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3001:3000" # Maps external port 3001 to internal port 3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - main-network
+
+  # 3. Node Exporter Service (For Host OS metrics like CPU, RAM, Storage)
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+    ports:
+      - "9100:9100"
+    networks:
+      - main-network
 
 volumes:
   postgres_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  main-network:
+    driver: bridge
 
   

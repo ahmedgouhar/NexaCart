@@ -1,4 +1,11 @@
 from fastapi import FastAPI
+
+#  Import the prometheus instrumentation library
+from prometheus_fastapi_instrumentator import Instrumentator
+
+# Instrument the app and expose the /metrics endpoint
+Instrumentator().instrument(app).expose(app)
+
 from app.routers import auth  # Import your new auth router file
 
 app = FastAPI(title="NexaCart API", docs_url="/docs", openapi_url="/openapi.json")

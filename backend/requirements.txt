@@ -10,3 +10,4 @@ python-jose[cryptography]
 celery                  # <-- MAKE SURE THIS IS HERE
 pyjwt==2.10.1
 alembic==1.14.1
+prometheus-fastapi-instrumentator==6.1.0
