@@ -5,7 +5,9 @@ NexaCart is a high-performance, containerized full-stack e-commerce platform eng
 It features a fully integrated, production-grade observability and monitoring pipeline powered by Prometheus and Grafana.
 
 ---
-
+<p align="center">
+  <img src="./assets/architecture.png" alt="NexaCart Architecture" width="80%">
+</p>
 ## 🏗️ Architecture Overview
 
 The platform splits core responsibilities across specialized, single-purpose containers orchestrated via Docker Compose:
