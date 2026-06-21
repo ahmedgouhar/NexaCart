@@ -1,3 +1,4 @@
+version: '3.8'
 
 services:
   # 1. THE GATEWAY (The Only Public Entrance)
@@ -10,6 +11,8 @@ services:
       - frontend
       - backend
     restart: always
+    networks:
+      - main-network
 
   # 2. DATABASE (PostgreSQL)
   db:
@@ -27,6 +30,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - main-network
 
   # 3. DB MANAGEMENT
   adminer:
@@ -36,12 +41,16 @@ services:
       - "8080:8080" # Left open for DB management
     depends_on:
       - db
+    networks:
+      - main-network
 
   # 4. CACHE (Redis)
   redis:
     image: redis:alpine
     restart: always
     command: redis-server --requirepass redis_password123
+    networks:
+      - main-network
 
   # 5. BACKEND (FastAPI)
   backend:
@@ -56,6 +65,8 @@ services:
       db:
         condition: service_healthy
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - main-network
 
   # 6. WORKER (Celery)
   worker:
@@ -71,12 +82,14 @@ services:
     depends_on:
       - redis
       - db
+    networks:
+      - main-network
 
   # 7. FRONTEND (React Vite)
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.dev  # <-- CRITICAL: Double check this line is exactly here
+      dockerfile: Dockerfile.dev
     container_name: nexacart_frontend
     volumes:
       - ./frontend:/app
@@ -85,8 +98,10 @@ services:
       - VITE_API_URL=/api/v1
     depends_on:
       - backend
+    networks:
+      - main-network
       
-  # 1. Prometheus Service
+  # 8. Prometheus Service
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -98,20 +113,20 @@ services:
     ports:
       - "9090:9090"
     networks:
-      - main-network # Match your existing docker-compose network name
+      - main-network
 
-  # 2. Grafana Service
+  # 9. Grafana Service
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
     ports:
-      - "3001:3000" # Maps external port 3001 to internal port 3000
+      - "3001:3000"
     volumes:
       - grafana_data:/var/lib/grafana
     networks:
       - main-network
 
-  # 3. Node Exporter Service (For Host OS metrics like CPU, RAM, Storage)
+  # 10. Node Exporter Service
   node-exporter:
     image: prom/node-exporter:latest
     container_name: node-exporter
@@ -136,5 +151,4 @@ volumes:
 networks:
   main-network:
     driver: bridge
-
-  
+    
