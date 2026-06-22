@@ -30,6 +30,10 @@ To guarantee system high-availability and prevent blind spots, NexaCart deploys 
 * **Node Exporter**: A lightweight agent mapping physical host machine operating system kernels directly to metrics (CPU Core spikes, RAM saturation, Disk I/O bottlenecks).
 * **Prometheus TSDB**: Actively scrapes targets every 15 seconds, indexing data points inside an optimized time-series database.
 * **Grafana Visualization**: Transforms raw PromQL queries into beautiful, human-readable dashboards, maps, and predictive graphs.
+<p align="center">
+  <img src="./assets/grafana.png" alt="Grafana Dashboard" width="85%">
+</p>
+
 
 ---
 
@@ -47,6 +51,9 @@ By design, internal application layers (such as the raw FastAPI port, PostgreSQL
 | **Grafana Metrics UI** | `http://grafana:3000` | 👉 [http://localhost:3001](http://localhost:3001) |
 | **Node Exporter Engine** | `http://node-exporter:9100/metrics` | _Internal Only (Isolated)_ |
 
+<p align="center">
+  <img src="./assets/frontend.png" alt="NexaCart Storefront" width="85%">
+</p>
 ---
 
 ## 🔐 Authentication & Data Security Patterns
