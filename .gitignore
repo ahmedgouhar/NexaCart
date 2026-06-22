@@ -29,3 +29,8 @@ dist
 *.tfstate
 *.tfstate.*
 .terraform.lock.hcl
+postgres_data/
+prometheus_data/
+grafana_data/
+*.pyc
+__pycache__/
