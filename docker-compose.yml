@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   # 1. THE GATEWAY (The Only Public Entrance)
@@ -67,6 +66,8 @@ services:
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     networks:
       - main-network
+    ports:
+      - "8000:8000"  
 
   # 6. WORKER (Celery)
   worker:
@@ -142,6 +143,19 @@ services:
       - "9100:9100"
     networks:
       - main-network
+  # 11. cadvisor Service
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+    - "8081:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+    networks:
+      - main-network    
 
 volumes:
   postgres_data:

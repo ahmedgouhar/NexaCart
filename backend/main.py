@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from app.db.session import engine, Base
 from app.api import products
 from fastapi.middleware.cors import CORSMiddleware
+from prometheus_fastapi_instrumentator import Instrumentator
 
 # Initialize Database Tables
 Base.metadata.create_all(bind=engine)
@@ -21,3 +22,6 @@ app.include_router(products.router, prefix="/api/v1/products", tags=["Products"]
 @app.get("/")
 def root():
     return {"message": "NexaCart API is Running"}
+
+# Expose Prometheus metrics
+Instrumentator().instrument(app).expose(app)
